@@ -1,3 +1,12 @@
+buildscript {
+
+    ext.hilt_version = '2.40'
+
+    dependencies {
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+    }
+}
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.2.0' apply false
@@ -5,6 +14,13 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }
 
+
+
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    retrofit = '2.9.0'
+    okHttpLoggingInterceptor = '4.9.0'
 }
