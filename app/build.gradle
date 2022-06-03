@@ -64,6 +64,7 @@ dependencies {
 
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2'
 
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 
 
 

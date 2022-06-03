@@ -2,6 +2,9 @@ package com.example.myprept.core.di
 
 import com.example.myprept.BuildConfig
 import com.example.myprept.core.data.source.ReposRepository
+import com.example.myprept.utils.async.ThreadManager
+import com.example.myprept.utils.async.ThreadManagerImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,4 +42,8 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideMoviesRepository(dataSource: ReposRepository.Network): ReposRepository = dataSource
+
+    @Provides
+    @Singleton
+     fun provideThreadManager(threadManager: ThreadManagerImpl): ThreadManager = threadManager
 }

@@ -32,6 +32,8 @@ fun <T> LiveData<T>?.observeForTestingObserver(): TestObserver<T> {
     return testObserver
 }
 
+
+
 class CurrentThreadExecutor : Executor {
     override fun execute(r: Runnable) {
         r.run()

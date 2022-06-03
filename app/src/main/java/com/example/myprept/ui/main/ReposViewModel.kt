@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myprept.core.data.source.ReposRepository
 import com.example.myprept.core.exception.Failure
-import com.example.myprept.features.repos.model.GetReposUseCase
 import com.example.myprept.features.repos.model.Repo
 import com.example.myprept.ui.common.UiStateViewModel
 import com.example.myprept.utils.UiStateManager
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReposViewModel
-@Inject constructor(private val getMovies: GetReposUseCase) : ViewModel(), UiStateViewModel {
+@Inject constructor(private val reposRepository: ReposRepository) : ViewModel(), UiStateViewModel {
 
     companion object {
         val DEBOUNCE_TIME_FOR_SEARCH = 500L
@@ -52,7 +52,12 @@ class ReposViewModel
 
      fun getRepos(q: String) {
         _uiState.value = UiStateManager.UiState.LOADING
-        getMovies(q, viewModelScope) { it.fold(::handleFailure, ::handleReposList) }
+        viewModelScope.launch {
+            val result = reposRepository.getRepos(q)
+            if(result.isLeft) {
+                handleFailure()
+            }
+        }
     }
 
     private fun handleReposList(repos: List<Repo>) {
@@ -65,7 +70,7 @@ class ReposViewModel
 
     }
 
-    fun handleFailure(failure: Failure) {
+    fun handleFailure() {
         _uiState.value = UiStateManager.UiState.ERROR
     }
 

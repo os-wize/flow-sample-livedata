@@ -75,7 +75,7 @@ interface UiStateManager {
      * Convenience function to observe UIState liveData from ViewModel
      */
     fun initStateObserver(lifeCycle: LifecycleOwner, uiState: LiveData<UiState>) {
-        uiState.observe(lifeCycle, Observer {
+        uiState.observe(lifeCycle) {
             when (it) {
                 UiState.ERROR -> onError()
                 UiState.EMPTY -> onErrorEmpty()
@@ -86,10 +86,11 @@ interface UiStateManager {
                 else -> {// Ignoring this
                 }
             }
-        })
+        }
     }
 
     val onSuccessEmpty: () -> Unit
+
     /**
      * Handle UI on any error
      */
