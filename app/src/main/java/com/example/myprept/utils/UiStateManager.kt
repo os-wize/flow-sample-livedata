@@ -32,7 +32,7 @@ interface UiStateManager {
         INIT_FAILED,
 
         /**
-         * Initial request successful, but no data
+         * Initial state no data
          */
         INIT_EMPTY,
 
@@ -81,6 +81,7 @@ interface UiStateManager {
                 UiState.EMPTY -> onErrorEmpty()
                 UiState.LOADING -> onLoading()
                 UiState.LOADED -> onLoaded()
+                UiState.INIT_EMPTY -> onSuccessEmpty()
                 UiState.ERROR_CONNECTION -> onErrorConnection()
                 else -> {// Ignoring this
                 }
@@ -88,6 +89,7 @@ interface UiStateManager {
         })
     }
 
+    val onSuccessEmpty: () -> Unit
     /**
      * Handle UI on any error
      */

@@ -18,7 +18,13 @@ import javax.inject.Inject
 class ReposViewModel
 @Inject constructor(private val getMovies: GetReposUseCase) : ViewModel(), UiStateViewModel {
 
-    private val _uiState = MutableLiveData<UiStateManager.UiState>()
+    companion object {
+        val DEBOUNCE_TIME_FOR_SEARCH = 500L
+    }
+
+    private val _uiState = MutableLiveData<UiStateManager.UiState>().apply {
+        value = UiStateManager.UiState.INIT_EMPTY
+    }
     override val uiState: LiveData<UiStateManager.UiState> = _uiState
 
     private val _repos: MutableLiveData<List<Repo>> = MutableLiveData()
@@ -29,7 +35,7 @@ class ReposViewModel
     init {
         viewModelScope.launch {
             query
-                .debounce(3000)
+                .debounce(DEBOUNCE_TIME_FOR_SEARCH)
                 .distinctUntilChanged()
                 .onEach {
                     if (it.isNotEmpty()) {
@@ -44,14 +50,15 @@ class ReposViewModel
         query.value = repoQuery
     }
 
-    fun getRepos(q: String) {
+     fun getRepos(q: String) {
         _uiState.value = UiStateManager.UiState.LOADING
-        getMovies(q, viewModelScope) { it.fold(::handleFailure, ::handleMovieList) }
+        getMovies(q, viewModelScope) { it.fold(::handleFailure, ::handleReposList) }
     }
 
-    private fun handleMovieList(repos: List<Repo>) {
+    private fun handleReposList(repos: List<Repo>) {
         if (repos.isEmpty()) {
             _uiState.value = UiStateManager.UiState.EMPTY
+
         } else {
             _uiState.value = UiStateManager.UiState.LOADED
         }

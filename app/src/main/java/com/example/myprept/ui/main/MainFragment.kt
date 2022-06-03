@@ -45,6 +45,7 @@ class MainFragment : Fragment(), UiStateManager, SearchView.OnQueryTextListener 
         initStateObserver(this, viewModel.uiState)
     }
 
+    override val onSuccessEmpty  = { println("err")}
 
 
     override val onError = { println("err")}
