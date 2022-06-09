@@ -54,9 +54,7 @@ class ReposViewModel
         _uiState.value = UiStateManager.UiState.LOADING
         viewModelScope.launch {
             val result = reposRepository.getRepos(q)
-            if(result.isLeft) {
-                handleFailure()
-            }
+            result.fold(::handleFailure, ::handleReposList)
         }
     }
 
@@ -70,7 +68,7 @@ class ReposViewModel
 
     }
 
-    fun handleFailure() {
+    fun handleFailure(failure: Failure) {
         _uiState.value = UiStateManager.UiState.ERROR
     }
 

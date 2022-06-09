@@ -37,8 +37,10 @@ class ReposViewModelTest {
 
     @Test
     fun init() {
-        val uiState = viewModel.uiState.observeForTestingResult()
-        assertThat(uiState).isEqualTo(UiStateManager.UiState.INIT_EMPTY)
+        testCoroutineRule.runBlockingTest {
+            val uiState = viewModel.uiState.observeForTestingObserver()
+            verify(uiState).onChanged(UiStateManager.UiState.INIT_EMPTY)
+        }
     }
 
     @Test
