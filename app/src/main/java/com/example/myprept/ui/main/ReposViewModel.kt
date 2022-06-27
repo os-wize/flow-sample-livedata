@@ -1,5 +1,6 @@
 package com.example.myprept.ui.main
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,17 +54,24 @@ class ReposViewModel
      fun getRepos(q: String) {
         _uiState.value = UiStateManager.UiState.LOADING
         viewModelScope.launch {
-            val result = reposRepository.getRepos(q)
-            result.fold(::handleFailure, ::handleReposList)
+            try {
+                val result = reposRepository.getRepos(q)
+                result.fold(::handleFailure, ::handleReposList)
+            } catch (e: Exception) {
+                println("Error")
+            }
         }
     }
 
     private fun handleReposList(repos: List<Repo>) {
         if (repos.isEmpty()) {
+
+            println(Thread.currentThread().name)
             _uiState.value = UiStateManager.UiState.EMPTY
 
         } else {
             _uiState.value = UiStateManager.UiState.LOADED
+            _repos.value = repos
         }
 
     }
